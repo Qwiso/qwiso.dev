@@ -44,7 +44,7 @@ function render() {
 }
 function validRepos(data) {
   if (!Array.isArray(data) || data.some(repo => !repo || typeof repo.name !== 'string')) throw new Error('Invalid repository response');
-  return data.filter(repo => !repo.private);
+  return data.filter(repo => !repo.private && repo.name.toLowerCase() !== 'qwiso.github.io');
 }
 async function getJSON(url) {
   const response = await fetch(url, { signal: AbortSignal.timeout(10000), headers: { Accept: 'application/vnd.github+json' } });
@@ -60,8 +60,8 @@ async function load() {
   try {
     const live = [];
     for (let page = 1; ; page++) {
-      const batch = validRepos(await getJSON(`https://api.github.com/users/Qwiso/repos?per_page=100&sort=updated&page=${page}`));
-      live.push(...batch);
+      const batch = await getJSON(`https://api.github.com/users/Qwiso/repos?per_page=100&sort=updated&page=${page}`);
+      live.push(...validRepos(batch));
       if (batch.length < 100) break;
     }
     repositories = live;
