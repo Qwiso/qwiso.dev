@@ -1,0 +1,50 @@
+[
+  {
+    "title": "IT Manager, Ops Coordinator",
+    "company": "Good Landing Recovery",
+    "location": "Gainesville, GA",
+    "description": "Apply a lifetime of technical knowledge to IT management, healthcare compliance, and sustainable growth. Coordinate operations with hands-on experience in house management, admissions, and behavioral health support."
+  },
+  {
+    "title": "Developer",
+    "company": "Privacy Bee",
+    "location": "Roswell, GA",
+    "description": "Managed core technology and built a scalable processing cluster using Linux, PHP threading, Docker Compose, and AWS. Used CodeBuild, CodeDeploy, Elastic Container Registry, and Fargate to build and deploy containerized workloads."
+  },
+  {
+    "title": "Developer",
+    "company": "Black Airplane",
+    "location": "Woodstock, GA",
+    "description": "Developed Laravel and Vue web applications for a wide range of client needs. Worked with Figma, Flutter, and Firebase as part of a collaborative production team."
+  },
+  {
+    "title": "Developer",
+    "company": "MacStadium",
+    "location": "Atlanta, GA",
+    "description": "Developed and maintained internal and customer-facing applications using LAMP and MEAN stacks. Established CI/CD pipelines in Azure and worked with macOS, NetSuite's SuiteTalk API, and Microsoft Office."
+  },
+  {
+    "title": "Software Contractor",
+    "company": "Ion Innovations",
+    "location": "Roswell, GA",
+    "description": "Developed C#/.NET software to automate a microscope, slide stage, and camera system. Refactored hardware APIs, built WPF controls, and processed terabytes of images. Created OpenCV classifier visualizations with 3D scatter plots and an OpenSeadragon gigapixel viewer, working in Scrum with Atlassian tools."
+  },
+  {
+    "title": "Jr. Developer",
+    "company": "Clickagy",
+    "location": "Roswell, GA",
+    "description": "Built the company website with WordPress on a LAMP stack. Managed AdWords campaigns using internal analytics data and handled marketing and customer support calls."
+  },
+  {
+    "title": "Certified Technician",
+    "company": "Staples",
+    "location": "Anderson, SC",
+    "description": "Provided computer troubleshooting, technical support, and repair services as an EzTech technician. Helped customers choose computers and electronics while handling sales and day-to-day retail responsibilities."
+  },
+  {
+    "title": "Survey Drafter",
+    "company": "Frontline Surveying & Mapping",
+    "location": "Marietta, GA",
+    "description": "Translated GPS survey data into accurate, official plats for land development."
+  }
+]

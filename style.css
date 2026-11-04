@@ -17,3 +17,14 @@ html{scroll-snap-type:y mandatory;scroll-padding-top:0}.topbar{position:absolute
 
 /* Stack the organization above the project rather than wrapping a repository path. */
 .featured-repo h3{display:flex;flex-direction:column;align-items:flex-start;gap:8px;font-size:22px;line-height:1.3;letter-spacing:normal}.organization-line{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:400;color:#b7a8c4}.organization-avatar{width:20px;height:20px;flex-shrink:0;border-radius:4px}.repository-title-line{display:flex;align-items:center;flex-wrap:wrap;gap:10px}.featured-title-link{position:relative;z-index:1}.featured-title-link strong{font-size:inherit;font-weight:600}.featured-title-link:hover{text-decoration:underline;text-underline-offset:4px}.featured-repo h3 .archive{margin-left:0;font-size:9px;font-weight:500;letter-spacing:1px}@media(max-width:580px){.featured-repo h3{font-size:20px}}
+
+/* Shared page chrome and content alignment. */
+:root{--site-gutter:2.4%;--header-gutter:2.4%}
+html{scrollbar-gutter:stable}
+.topbar{margin-left:var(--header-gutter);margin-right:var(--header-gutter)}
+.topbar nav{align-items:center}
+.topbar nav a:hover{color:#d2c0e1}
+.topbar nav a[aria-current]{color:var(--secondary)}
+.projects{padding-left:var(--site-gutter);padding-right:var(--site-gutter)}
+footer{margin-left:var(--site-gutter);margin-right:var(--site-gutter)}
+@media(max-width:580px){:root{--site-gutter:4%;--header-gutter:5%}.topbar nav .blog-nav,.topbar nav .about-nav{display:inline}}
