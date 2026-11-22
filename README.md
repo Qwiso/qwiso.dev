@@ -1,6 +1,6 @@
 # QwisoDEV
 
-Personal site and a static, Markdown-powered blog. Node.js 24 is used locally and in GitHub Actions.
+Personal site and a static, Markdown-powered blog. Node.js 24 is used locally and in GitHub Actions; the site is hosted on Cloudflare Workers.
 
 ## Local preview
 
@@ -35,8 +35,14 @@ The filename becomes `/blog/your-post-slug/`. Use `draft: true` in the metadata 
 
 Edit `about.json` to replace the résumé placeholders. Each entry has `title`, `company`, `location`, and `description` fields. Entries appear in the same order as the file, formatted as **Job Title, Company (Location)** with the description underneath. The page at `/about/` shares the homepage navigation, footer, and spacing. Changes rebuild during local preview; refresh to see them.
 
-## GitHub Pages
+## Cloudflare Workers
 
-The workflow in `.github/workflows/pages.yml` builds and deploys `dist/` on pushes to `main` or manual runs. In the repository's **Settings → Pages**, select **GitHub Actions** as the source before deploying. Adjust the workflow branch if the publishing branch changes. The canonical origin is `https://qwiso.dev`, matching `CNAME`; update `scripts/build.mjs` and homepage metadata if the domain changes.
+The site deploys as a static-assets Worker configured in `wrangler.jsonc`: Cloudflare serves `dist/` directly, `/blog/post` redirects to `/blog/post/`, and unknown paths return `dist/404.html` with a 404 status. No Worker script is involved.
+
+- `npm run preview` builds and serves the site with the Workers runtime at http://localhost:8787, to check routing and 404 behavior before deploying.
+- `npm run deploy` builds and deploys from your machine (run `npx wrangler login` once first).
+- `.github/workflows/deploy.yml` builds and deploys on pushes to `main` or manual runs. Add the repository secrets `CLOUDFLARE_API_TOKEN` (a token from the **Edit Cloudflare Workers** template) and `CLOUDFLARE_ACCOUNT_ID`.
+
+The `qwiso.dev` zone must be on the same Cloudflare account; the `custom_domain` route in `wrangler.jsonc` creates the DNS record and certificate on deploy. Remove any existing `A`/`CNAME` records for the apex (such as the old GitHub Pages ones) first, or the deploy will fail. The canonical origin is `https://qwiso.dev`; update `wrangler.jsonc`, `scripts/build.mjs`, and homepage metadata if the domain changes.
 
 After deploying, submit `/sitemap.xml` to Google Search Console and inspect a direct article URL. Article content and navigation work without JavaScript; the homepage repository feed retains its existing JavaScript behavior. Search eligibility does not guarantee indexing.

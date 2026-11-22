@@ -1,0 +1,18 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "qwiso-dev",
+  "compatibility_date": "2026-11-19",
+  // Static-assets-only Worker: Cloudflare serves the generated dist/ directly.
+  "assets": {
+    "directory": "./dist",
+    // /blog/post/ serves dist/blog/post/index.html; /blog/post redirects to the slash form.
+    "html_handling": "auto-trailing-slash",
+    // Unknown paths get dist/404.html with a 404 status.
+    "not_found_handling": "404-page"
+  },
+  "routes": [
+    { "pattern": "qwiso.dev", "custom_domain": true }
+  ],
+  "workers_dev": true,
+  "observability": { "enabled": true }
+}

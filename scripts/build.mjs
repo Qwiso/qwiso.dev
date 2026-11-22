@@ -60,7 +60,7 @@ export async function build() {
   posts.sort((a, b) => b.date.localeCompare(a.date) || a.slug.localeCompare(b.slug));
   await rm(out, { recursive: true, force: true });
   await mkdir(path.join(out, 'blog'), { recursive: true });
-  for (const file of ['style.css', 'blog.css', 'about.css', 'app.js', 'repos.json', 'favicon.ico', 'favicon.svg', 'moon.svg', 'site-icon.png', 'CNAME']) await copyFile(path.join(root, file), path.join(out, file));
+  for (const file of ['style.css', 'blog.css', 'about.css', 'app.js', 'repos.json', 'favicon.ico', 'favicon.svg', 'moon.svg', 'site-icon.png']) await copyFile(path.join(root, file), path.join(out, file));
   const cards = posts.map(card).join('\n');
   await writeFile(path.join(out, 'index.html'), home);
   const content = `<header class="blog-masthead"><h1 class="eyebrow"><span class="signal" aria-hidden="true"></span> THE QWISODEV BLOG</h1></header><section class="writing" aria-labelledby="writing-heading"><div class="writing-heading"><h2 id="writing-heading">Latest writing</h2><span>${posts.length} ${posts.length === 1 ? 'entry' : 'entries'} / newest first</span></div><div class="post-grid">${cards || '<p>No posts yet. Check back soon.</p>'}</div></section>`;
@@ -79,7 +79,6 @@ export async function build() {
   await writeFile(path.join(out, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${['/', '/blog/', '/about/', ...posts.map(p => p.url)].map(url => `<url><loc>${origin}${url}</loc></url>`).join('')}</urlset>`);
   await writeFile(path.join(out, 'robots.txt'), `User-agent: *\nAllow: /\nSitemap: ${origin}/sitemap.xml\n`);
   await writeFile(path.join(out, 'feed.xml'), `<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>QwisoDEV — From the workshop</title><link>${origin}/blog/</link><description>Ideas, experiments, and notes on making things for the web.</description><language>en</language>${posts.map(p => `<item><title>${escape(p.title)}</title><link>${origin}${p.url}</link><guid>${origin}${p.url}</guid><pubDate>${new Date(p.date).toUTCString()}</pubDate><description>${escape(p.description)}</description></item>`).join('')}</channel></rss>`);
-  await writeFile(path.join(out, '.nojekyll'), '');
   await writeFile(path.join(out, '404.html'), page({ title: 'Page not found', description: 'This page could not be found.', url: '/404.html', content: '<section class="blog-intro"><p class="eyebrow">404 / LOST IN THE WORKSHOP</p><h1>Nothing<br><span>here yet.</span></h1><a class="text-link" href="/blog/">Explore the blog ↗</a></section>' }).replace('<meta name="theme-color"', '<meta name="robots" content="noindex"><meta name="theme-color"'));
   console.log(`Built ${posts.length} posts into dist/`);
 }
