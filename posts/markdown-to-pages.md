@@ -27,7 +27,7 @@ The filename becomes the URL. A file named `a-new-idea.md` becomes `/blog/a-new-
 
 ## Do the work before the visit
 
-The build reads the metadata, converts the Markdown, and wraps the result in the site's layout. It also updates the blog index, homepage previews, sitemap, and RSS feed.
+The build reads the metadata, converts the Markdown, and wraps the result in the site's layout. It also updates the blog index, sitemap, and RSS feed.
 
 That means the browser receives the article immediately. It does not need to fetch another file or run a Markdown parser before showing the words.
 
@@ -50,6 +50,6 @@ npm install
 npm run dev
 ```
 
-Edit a post, refresh the preview, and read it as a visitor would. When it is ready, the same build can produce the static files for GitHub Pages.
+Edit a post, refresh the preview, and read it as a visitor would. When it is ready, the same build produces the static files that Cloudflare serves.
 
 Plain files. Stable links. A little less machinery between an idea and a page.

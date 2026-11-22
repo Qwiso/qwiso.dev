@@ -1,50 +1,63 @@
 'use strict';
 const grid = document.querySelector('#repos');
 const statusLine = document.querySelector('#status');
-const search = document.querySelector('#search');
-const sort = document.querySelector('#sort');
 let repositories = [];
 const languageColors = { JavaScript: '#FFA411', TypeScript: '#789be8', Python: '#84E543', HTML: '#e77c61', CSS: '#b57be0', Shell: '#84E543', Rust: '#d6aa8a', 'C#': '#a585df' };
+const icons = {
+  star: 'M8 1.5l1.9 4 4.4.5-3.3 3 .9 4.4L8 11.2 4.1 13.4l.9-4.4-3.3-3 4.4-.5z',
+  fork: 'M5 2.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm6 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM8 10.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM5 5.5v1a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-1M8 8.5v2'
+};
 function element(tag, className, text) {
   const node = document.createElement(tag);
   if (className) node.className = className;
   if (text !== undefined) node.textContent = text;
   return node;
 }
+function stat(kind, count, label) {
+  const node = element('span', 'stat');
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('viewBox', '0 0 16 16');
+  svg.setAttribute('aria-hidden', 'true');
+  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  path.setAttribute('d', icons[kind]);
+  path.setAttribute('fill', 'none');
+  path.setAttribute('stroke', 'currentColor');
+  path.setAttribute('stroke-width', '1.3');
+  path.setAttribute('stroke-linejoin', 'round');
+  svg.append(path);
+  node.append(svg, document.createTextNode(String(count)), element('span', 'visually-hidden', ` ${label}`));
+  return node;
+}
+function repoCard(repo) {
+  const card = element('a', 'repo-card');
+  // Construct the destination from the name; never trust a URL from cached data.
+  card.href = `https://github.com/Qwiso/${encodeURIComponent(repo.name)}`;
+  const heading = element('h3', '', repo.name);
+  if (repo.archived) heading.append(element('span', 'archive', 'ARCHIVED'));
+  else if (repo.fork) heading.append(element('span', 'badge', 'FORK'));
+  card.append(heading);
+  if (repo.description) card.append(element('p', '', repo.description));
+  const meta = element('div', 'card-meta');
+  const language = element('span', 'language');
+  const dot = element('span', 'dot');
+  dot.style.backgroundColor = languageColors[repo.language] || '#9542CD';
+  language.append(dot, document.createTextNode(repo.language || 'Repository'));
+  const stars = repo.stargazers_count || 0, forks = repo.forks_count || 0;
+  const arrow = element('span', 'card-arrow', '↗');
+  arrow.setAttribute('aria-hidden', 'true');
+  meta.append(language, stat('star', stars, stars === 1 ? 'star' : 'stars'), stat('fork', forks, forks === 1 ? 'fork' : 'forks'), arrow);
+  card.append(meta);
+  return card;
+}
 function render() {
-  const query = search.value.trim().toLowerCase();
-  const visible = repositories.filter(repo => `${repo.name} ${repo.description || ''} ${repo.language || ''}`.toLowerCase().includes(query));
-  visible.sort(sort.value === 'stars' ? (a, b) => (b.stargazers_count || 0) - (a.stargazers_count || 0) || a.name.localeCompare(b.name) : sort.value === 'name' ? (a, b) => a.name.localeCompare(b.name) : (a, b) => new Date(b.updated_at) - new Date(a.updated_at));
-  grid.replaceChildren();
-  document.querySelector('#count').textContent = `${visible.length} / ${repositories.length} repositories`;
-  visible.forEach((repo, index) => {
-    const card = element('a', 'repo-card');
-    // Construct the destination from the name; never trust a URL from cached data.
-    card.href = `https://github.com/Qwiso/${encodeURIComponent(repo.name)}`;
-    const top = element('div', 'card-top');
-    top.append(element('span', 'repo-icon', '⌘'), element('span', 'card-number', `REPO / ${String(index + 1).padStart(2, '0')}`));
-    const heading = element('h3', '', repo.name);
-    if (repo.archived) heading.append(element('span', 'archive', 'ARCHIVED'));
-    const meta = element('div', 'card-meta');
-    const language = element('span', 'language');
-    const dot = element('span', 'dot');
-    dot.style.backgroundColor = languageColors[repo.language] || '#9542CD';
-    language.append(dot, document.createTextNode(repo.language || 'Repository'));
-    const stars = element('span', '', `☆ ${repo.stargazers_count || 0}`);
-    stars.setAttribute('aria-label', `${repo.stargazers_count || 0} stars`);
-    const forks = element('span', '', `⑂ ${repo.forks_count || 0}`);
-    forks.setAttribute('aria-label', `${repo.forks_count || 0} forks`);
-    const arrow = element('span', 'card-arrow', '↗');
-    arrow.setAttribute('aria-hidden', 'true');
-    meta.append(language, stars, forks, arrow);
-    card.append(top, heading, element('p', '', repo.description || (repo.fork ? 'An open-source project, forked and ready to explore.' : 'An idea taking shape. Explore the code on GitHub.')), meta);
-    grid.append(card);
-  });
-  if (!visible.length) grid.append(element('p', 'empty', query ? 'No repositories match your search. Try another name or language.' : 'No public repositories to display yet.'));
+  const sorted = [...repositories].sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
+  grid.replaceChildren(...sorted.map(repoCard));
+  if (!sorted.length) grid.append(element('p', 'empty', 'No public repositories to display yet.'));
 }
 function validRepos(data) {
   if (!Array.isArray(data) || data.some(repo => !repo || typeof repo.name !== 'string')) throw new Error('Invalid repository response');
-  return data.filter(repo => !repo.private && repo.name.toLowerCase() !== 'qwiso.github.io');
+  // This site's own repository (under its old and new names) isn't listed on itself.
+  return data.filter(repo => !repo.private && !['qwiso.github.io', 'qwiso.dev'].includes(repo.name.toLowerCase()));
 }
 async function getJSON(url) {
   const response = await fetch(url, { signal: AbortSignal.timeout(10000), headers: { Accept: 'application/vnd.github+json' } });
@@ -55,7 +68,7 @@ async function load() {
   try {
     repositories = validRepos(await getJSON('repos.json'));
     render();
-    statusLine.textContent = 'Saved repository snapshot · checking for updates…';
+    statusLine.textContent = '';
   } catch { /* The live API can still populate the page if the snapshot is unavailable. */ }
   try {
     const live = [];
@@ -66,14 +79,12 @@ async function load() {
     }
     repositories = live;
     render();
-    statusLine.textContent = 'Up to date with GitHub · public code, open possibilities.';
+    statusLine.textContent = '';
   } catch {
     statusLine.textContent = repositories.length ? 'Showing a saved snapshot · live GitHub updates are temporarily unavailable.' : 'GitHub is temporarily unavailable. Visit the profile link below to explore the repositories.';
     if (!repositories.length) render();
   }
 }
-search.addEventListener('input', render);
-sort.addEventListener('change', render);
 if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
   let pending = false;
   addEventListener('scroll', () => {
@@ -113,7 +124,7 @@ for (let index = 0; index < 65; index++) {
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
-  let width = 0, height = 0, frame = 0;
+  let width = 0, height = 0, frame = 0, onScreen = true;
   function resize() {
     const bounds = canvas.getBoundingClientRect();
     width = bounds.width; height = bounds.height;
@@ -160,12 +171,18 @@ for (let index = 0; index < 65; index++) {
         ctx.beginPath(); ctx.moveTo(x, y + offset); ctx.lineTo(x + length, y + offset - .4); ctx.stroke();
       }
     }
-    if (!motion.matches && !document.hidden) frame = requestAnimationFrame(draw);
+    if (!motion.matches && !document.hidden && onScreen) frame = requestAnimationFrame(draw);
   }
   function restart() { cancelAnimationFrame(frame); draw(performance.now()); }
   resize(); restart();
   addEventListener('resize', () => { resize(); if (motion.matches) restart(); }, { passive: true });
   document.addEventListener('visibilitychange', restart);
   motion.addEventListener('change', restart);
+  // Stop drawing once the seascape scrolls out of view.
+  new IntersectionObserver(([entry]) => {
+    if (entry.isIntersecting === onScreen) return;
+    onScreen = entry.isIntersecting;
+    restart();
+  }).observe(canvas);
 })();
 

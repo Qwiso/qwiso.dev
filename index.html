@@ -25,6 +25,7 @@
   <meta name="twitter:description" content="QwisoDEV — a home for experiments, open-source projects, and things worth building.">
   <meta name="twitter:image" content="https://qwiso.dev/site-icon.png?v=qwiso-2">
   <meta name="twitter:image:alt" content="QwisoDEV's original purple Q on black">
+  <link rel="preload" href="/assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="blog.css">
   <link rel="canonical" href="https://qwiso.dev/">
@@ -40,8 +41,6 @@
     <div class="moon"></div>
     <div class="horizon"></div>
     <div class="ocean"></div>
-    <div class="wave wave-one"></div>
-    <div class="wave wave-two"></div>
   </div>
   <header class="topbar"><a class="brand" href="#">Qwiso<span class="dev">DEV</span></a>
     <nav aria-label="Main navigation"><a href="/#projects">Projects</a><a class="blog-nav" href="/blog/">Blog</a><a class="about-nav" href="/about/">About</a><a href="https://github.com/Qwiso" class="github-link">GitHub <span>↗</span></a>
@@ -63,7 +62,7 @@
       </div>
       <article class="repo-card featured-repo" aria-labelledby="qmod-title" aria-describedby="qmod-description">
         <div class="featured-intro">
-          <p class="eyebrow">WHERE IT STARTED</p><span class="authorship">Original author</span>
+          <p class="featured-label">Where it started</p><span class="authorship">Original author</span>
         </div>
         <div class="featured-copy">
           <h3 id="qmod-title"><span class="organization-line"><img class="organization-avatar"
@@ -82,13 +81,6 @@
           aria-label="Explore QModManager's original commits">Explore the archive <span class="card-arrow"
             aria-hidden="true">↗</span></a>
       </article>
-      <div class="toolbar"><label class="search"><span aria-hidden="true">⌕</span><input id="search" type="search"
-            placeholder="Find a repository…" aria-label="Search repositories"></label><label class="sort">Sort by
-          <select id="sort">
-            <option value="updated">Recently updated</option>
-            <option value="stars">Most starred</option>
-            <option value="name">Name A–Z</option>
-          </select></label><span id="count" class="count"></span></div>
       <p id="status" class="status" role="status">Finding the latest from GitHub…</p>
       <div class="repo-grid" id="repos" aria-label="Public repositories"></div><noscript>
         <p>Enable JavaScript to explore the repository cards, or <a
@@ -98,7 +90,7 @@
       </div>
     </section>
   </main>
-  <footer><a class="brand" href="#"><span class="footer-name">QwisoDEV</span></a><a href="/feed.xml">RSS feed ↗</a><a href="#">Back to the surface ↑</a>
+  <footer><a class="brand" href="#"><span class="footer-name">QwisoDEV</span></a><a href="/feed.xml">RSS feed ↗</a><a href="#home">Back to the surface ↑</a>
   </footer>
 </body>
 

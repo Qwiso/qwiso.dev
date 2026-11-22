@@ -1,5 +1,6 @@
 /* The shared page shell and section headings use the homepage styles. */
 .resume { padding-bottom: 30px; }
+.resume > h2 { margin: 0 0 30px; }
 .resume-entry { padding: 30px 0; border-top: 1px solid var(--line); }
 .resume-entry h3 {
   margin: 0 0 14px; color: #e2dbe9; font-size: 21px;
@@ -7,10 +8,10 @@
   overflow-wrap: anywhere;
 }
 .job-company { color: #b7a8c4; font-weight: 400; }
-.job-location { color: #9b90a6; }
+.job-location { color: #a99cb6; white-space: nowrap; }
 .resume-entry p {
-  max-width: 90ch; margin: 0; color: #9c91a6;
-  font-size: 12px; line-height: 1.8;
+  max-width: 62ch; margin: 0; color: #a99cb6;
+  font-size: 15px; line-height: 1.75;
 }
 @media (max-width: 580px) {
   .resume-entry { padding: 24px 0; }
