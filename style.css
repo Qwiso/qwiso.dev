@@ -23,7 +23,6 @@ html{scroll-padding-top:0}.topbar{position:absolute;top:0;left:0;right:0}.hero{h
 
 /* Shared page chrome and content alignment. */
 :root{--site-gutter:2.4%;--header-gutter:2.4%}
-html{scrollbar-gutter:stable}
 .topbar{margin-left:var(--header-gutter);margin-right:var(--header-gutter)}
 .topbar nav{align-items:center}
 .topbar nav a:hover{color:#d2c0e1}
